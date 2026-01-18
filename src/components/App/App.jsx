@@ -15,7 +15,7 @@ import Footer from "../Footer/Footer";
 function App() {
   const [weatherData, setWeatherData] = useState({
     type: "",
-    temp: { F: 999 },
+    temp: { F: null },
     city: "",
   });
   const [activeModal, setActiveModal] = useState("");
@@ -57,6 +57,7 @@ function App() {
         />
       </div>
       <ModalWithForm
+        name="add-garment"
         title="New garment"
         buttonText="Add garment"
         isOpen={activeModal === "add-garment"}
@@ -69,6 +70,7 @@ function App() {
             className="modal__input"
             id="name"
             placeholder="Name"
+            required
           />
         </label>
         <label htmlFor="imageUrl" className="modal__label">
@@ -78,6 +80,7 @@ function App() {
             className="modal__input modal__input--large"
             id="imageUrl"
             placeholder="Image URL"
+            required
           />
         </label>
         <fieldset className="modal__radio-buttons">
@@ -89,6 +92,7 @@ function App() {
               className="modal__radio-input"
               name="weather"
               value="hot"
+              required
             />
             Hot
           </label>
@@ -102,6 +106,7 @@ function App() {
               className="modal__radio-input"
               name="weather"
               value="warm"
+              required
             />
             Warm
           </label>
