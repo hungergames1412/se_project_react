@@ -1,0 +1,16 @@
+.footer {
+  max-width: 1360px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 171px 0 24px 0;
+}
+
+.footer__content {
+  margin: 0;
+}
+
+.footer__year {
+  margin: 0;
+}
