@@ -1,12 +1,13 @@
 .modal__content_type_image {
   border-radius: 16px;
-  /* width: 100%; */
+  width: 100%;
   padding: 0;
   overflow: hidden;
 }
 
 .modal__image {
   display: block;
+  width: 100%;
 }
 
 .modal__footer {
@@ -14,6 +15,7 @@
   flex-direction: column;
   gap: 12px;
   padding: 20px 32px 32px;
+  position: relative;
 }
 
 .modal__caption,
@@ -22,4 +24,16 @@
   font-weight: 700;
   font-size: 20px;
   line-height: 24px;
+}
+
+.modal__delete-item {
+  position: absolute;
+  right: 32px;
+  color: rgba(255, 77, 0, 1);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  background: none;
+  border: none;
+  padding: 0;
 }
