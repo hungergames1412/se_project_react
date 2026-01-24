@@ -12,6 +12,11 @@ Features:
 - Displays weather in Fahrenheit
 - Shows default clothing items
 - Modal components for item details and forms
+- Ability to add other clothing items
+- Toggle Switch to change from Celsius to Fahrenheit
 
 Link to the respository:
 https://github.com/hungergames1412/se_project_react.git
+
+Link to the Pitch Video: 
+https://www.loom.com/share/e78e3310ad02406ea28ae31c95f5af97

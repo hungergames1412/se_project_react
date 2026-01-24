@@ -131,6 +131,24 @@
       "name": "Jurassic Park Tee",
       "imageUrl": "https://m.media-amazon.com/images/I/51BDAkhHWhL._AC_SX569_.jpg",
       "weather": "hot"
+    },
+    {
+      "name": "Carhartt Jacket",
+      "imageUrl": "https://m.media-amazon.com/images/I/51EJzY1+KKL._AC_SX425_.jpg",
+      "weather": "cold",
+      "_id": 22
+    },
+    {
+      "name": "Carhartt Insulated Bibs",
+      "imageUrl": "https://m.media-amazon.com/images/I/51IJGgsFzuL._AC_SX569_.jpg",
+      "weather": "cold",
+      "_id": 23
+    },
+    {
+      "name": "Snow Boots",
+      "imageUrl": "https://m.media-amazon.com/images/I/71-l21uIbCL._AC_SY575_.jpg",
+      "weather": "cold",
+      "_id": 24
     }
   ]
 }
