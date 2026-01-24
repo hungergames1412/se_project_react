@@ -13,6 +13,7 @@ import AddItemModal from "../AddItemModal/AddItemModal";
 import { addItem, getItems, removeItem } from "../../utils/api";
 
 function App() {
+  // State
   const [weatherData, setWeatherData] = useState({
     type: "",
     temp: { F: 999, C: 999 },
@@ -23,37 +24,38 @@ function App() {
   const [activeModal, setActiveModal] = useState("");
   const [selectedCard, setSelectedCard] = useState({});
   const [clothingItems, setClothingItems] = useState([]);
-
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
 
+  // Toggle temperature unit
   const handleToggleSwitchChange = () => {
     setCurrentTemperatureUnit(currentTemperatureUnit === "F" ? "C" : "F");
   };
 
+  // Card click opens preview modal
   const handleCardClick = (card) => {
     setActiveModal("preview");
     setSelectedCard(card);
   };
 
+  // Add button opens add-garment modal
   const handleAddClick = () => {
     setActiveModal("add-garment");
-    console.log("Getting close to opening the addItemModal");
   };
 
+  // Delete card
   const handleDeleteClick = (card) => {
     const id = card._id;
-    const filteredArr = clothingItems.filter((item) => {
-      return item._id != id;
-    });
+    const filteredItems = clothingItems.filter((item) => item._id !== id);
 
     removeItem(id)
       .then(() => {
-        setClothingItems(filteredArr);
-        closeActiveModal(card);
+        setClothingItems(filteredItems);
+        closeActiveModal();
       })
       .catch(console.error);
   };
 
+  // Add new item
   const onAddItem = (inputValues) => {
     const newCardData = {
       name: inputValues.name,
@@ -63,16 +65,19 @@ function App() {
 
     addItem(newCardData)
       .then((data) => {
+        // Prepend new item for newest-first ordering
         setClothingItems([data, ...clothingItems]);
         closeActiveModal();
       })
       .catch(console.error);
   };
 
+  // Close any active modal
   const closeActiveModal = () => {
     setActiveModal("");
   };
 
+  // Fetch weather and clothing items on mount
   useEffect(() => {
     getWeather(coordinates, APIkey)
       .then((data) => {
@@ -85,11 +90,15 @@ function App() {
 
     getItems()
       .then((data) => {
-        setClothingItems(data);
-        data.reverse();
+        // Sort newest-first safely
+        setClothingItems(
+          [...data].sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+          ),
+        );
       })
       .catch(console.error);
-  }, []);
+  }, []); // Empty dependency array → run once on mount
 
   return (
     <CurrentTemperatureUnitContext.Provider
@@ -122,11 +131,13 @@ function App() {
           </Routes>
           <Footer />
         </div>
+
         <AddItemModal
           onClose={closeActiveModal}
           isOpen={activeModal === "add-garment"}
           onAddItem={onAddItem}
-        ></AddItemModal>
+        />
+
         <ItemModal
           activeModal={activeModal}
           card={selectedCard}
