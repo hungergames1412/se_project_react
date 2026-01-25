@@ -8,6 +8,7 @@ const AddItemModal = ({ isOpen, onAddItem, onClose }) => {
   function handleSubmit(evt) {
     evt.preventDefault();
     onAddItem(values);
+    setValues({ name: "", imageUrl: "", weather: "" });
   }
 
   return (
