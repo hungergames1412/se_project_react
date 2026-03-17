@@ -21,5 +21,8 @@ Features:
 Link to the respository:
 https://github.com/hungergames1412/se_project_react.git
 
+Link to Backend of project:
+https://github.com/hungergames1412/se_project_express
+
 Link to the Pitch Video: 
 https://www.loom.com/share/e78e3310ad02406ea28ae31c95f5af97
