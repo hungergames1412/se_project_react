@@ -1,45 +1,58 @@
-import "./ModalWithForm.css";
+import "./ItemModal.css";
+import { useContext } from "react";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
 
-function ModalWithForm({
-  children,
-  buttonText,
-  secondButtonText,
-  title,
-  isOpen,
-  onSecondButtonClick,
+function ItemModal({
+  activeModal,
   closeActiveModal,
-  onSubmit,
+  card,
+  handleDeleteClick,
+  selectedCard,
 }) {
+  const currentUser = useContext(CurrentUserContext);
+
+  const ownerId =
+    typeof selectedCard?.owner === "string"
+      ? selectedCard?.owner
+      : selectedCard?.owner?._id;
+
+  const isOwn = ownerId === currentUser?._id;
+
+  const handleDelete = () => {
+    handleDeleteClick();
+  };
+
   return (
-    <div className={`modal ${isOpen && "modal__opened"}`}>
-      <div className="modal__content">
-        <h2 className="modal__title">{title}</h2>
+    <div
+      className={`modal ${activeModal === "preview" ? "modal__opened" : ""}`}
+    >
+      <div className="modal__content modal__content_type_image">
         <button
-          aria-label="Close form modal"
+          aria-label="Close item modal"
           onClick={closeActiveModal}
           className="modal__close-btn"
           type="button"
         ></button>
-        <form onSubmit={onSubmit} className="modal__form">
-          {children}
-          <div className="modal__buttons">
-            <button type="submit" className="modal__submit">
-              {buttonText}
+
+        <img src={card?.imageUrl} alt={card?.name} className="modal__image" />
+
+        <div className="modal__footer">
+          <h2 className="modal__caption">{card?.name}</h2>
+          <p className="modal__weather">Weather: {card?.weather}</p>
+
+          {isOwn && (
+            <button
+              onClick={handleDelete}
+              type="button"
+              className="modal__delete-item"
+            >
+              Delete item
             </button>
-            {secondButtonText && (
-              <button
-                type="button"
-                className="modal__switch"
-                onClick={onSecondButtonClick}
-              >
-                {secondButtonText}
-              </button>
-            )}
-          </div>
-        </form>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
-export default ModalWithForm;
+export default ItemModal;

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
 import { getWeather, filterWeatherData } from "../../utils/weatherApi";
-import { coordinates, APIkey } from "../../utils/constants";
+import { coordinates, apiKey } from "../../utils/constants";
 import {
   addItem,
   getItems,
@@ -48,7 +48,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getWeather(coordinates, APIkey)
+    getWeather(coordinates, apiKey)
       .then((data) => {
         const filteredData = filterWeatherData(data);
         setWeatherData(filteredData);

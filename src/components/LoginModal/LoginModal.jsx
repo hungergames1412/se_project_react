@@ -1,24 +1,20 @@
 import { useState, useEffect } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 
-export default function LoginModal({
-  closeActiveModal,
+export default function LogInModal({
   isOpen,
-  onLoginModalSubmit,
-  onSecondButtonClick,
+  onClose,
+  handleLogin,
+  handleRegisterClick,
 }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { values, handleChange, errors, isValid, resetForm } =
+    useFormAndValidation();
 
   useEffect(() => {
     if (isOpen) {
-      setEmail("");
-      setPassword("");
+      resetForm();
     }
-  }, [isOpen]);
-
-  const handleEmailChange = (e) => setEmail(e.target.value);
-  const handlePasswordChange = (e) => setPassword(e.target.value);
+  }, [isOpen, resetForm]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
