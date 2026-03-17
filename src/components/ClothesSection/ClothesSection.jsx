@@ -11,9 +11,12 @@ export default function ClothesSection({
   isLoggedIn,
 }) {
   const currentUser = useContext(CurrentUserContext);
-  const myItems = currentUser
-    ? clothingItems.filter((item) => item.owner._id === currentUser._id)
-    : [];
+
+  const myItems = clothingItems.filter((item) => {
+    const ownerId =
+      typeof item.owner === "string" ? item.owner : item.owner?._id;
+    return ownerId === currentUser._id;
+  });
 
   return (
     <div className="clothes-section">
@@ -27,18 +30,17 @@ export default function ClothesSection({
           + Add new
         </button>
       </div>
+
       <ul className="clothes-section__list">
-        {clothingItems.map((item) => {
-          return (
-            <ItemCard
-              isLoggedIn={isLoggedIn}
-              key={item._id}
-              item={item}
-              onCardClick={handleCardClick}
-              onCardLike={onCardLike}
-            />
-          );
-        })}
+        {myItems.map((item) => (
+          <ItemCard
+            key={item._id}
+            item={item}
+            onCardClick={handleCardClick}
+            onCardLike={onCardLike}
+            isLoggedIn={isLoggedIn}
+          />
+        ))}
       </ul>
     </div>
   );

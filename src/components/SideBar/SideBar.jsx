@@ -4,6 +4,7 @@ import CurrentUserContext from "../../contexts/CurrentUserContext";
 
 export default function SideBar({ onEditProfile, onLogout }) {
   const currentUser = useContext(CurrentUserContext);
+
   return (
     <aside className="sidebar">
       <div className="sidebar__user-container">
@@ -14,6 +15,7 @@ export default function SideBar({ onEditProfile, onLogout }) {
         />
         <p className="sidebar__username">{currentUser.name}</p>
       </div>
+
       <div className="sidebar__buttons-container">
         <button
           className="sidebar__change-profile-btn"
@@ -22,10 +24,11 @@ export default function SideBar({ onEditProfile, onLogout }) {
         >
           Change profile data
         </button>
+
         <button
           className="sidebar__logout-btn"
           onClick={onLogout}
-          type="submit"
+          type="button"
         >
           Log out
         </button>

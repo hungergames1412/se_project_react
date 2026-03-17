@@ -6,14 +6,21 @@ export default function Profile({
   clothingItems,
   handleCardClick,
   handleAddClick,
+  onEditProfile,
+  onLogout,
+  onCardLike,
+  isLoggedIn,
 }) {
   return (
     <section className="profile">
-      <SideBar />
+      <SideBar onEditProfile={onEditProfile} onLogout={onLogout} />
+
       <ClothesSection
-        handleCardClick={handleCardClick}
         clothingItems={clothingItems}
+        handleCardClick={handleCardClick}
         handleAddClick={handleAddClick}
+        onCardLike={onCardLike}
+        isLoggedIn={isLoggedIn}
       />
     </section>
   );

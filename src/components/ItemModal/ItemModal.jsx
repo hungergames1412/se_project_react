@@ -10,14 +10,20 @@ function ItemModal({
   selectedCard,
 }) {
   const currentUser = useContext(CurrentUserContext);
-  const isOwn = selectedCard.owner === currentUser._id;
+
+  const ownerId =
+    typeof selectedCard.owner === "string"
+      ? selectedCard.owner
+      : selectedCard?.owner?._id;
+
+  const isOwn = ownerId === currentUser?._id;
 
   const handleDelete = () => {
-    handleDeleteClick(card);
+    handleDeleteClick(); 
   };
 
   return (
-    <div className={`modal ${activeModal === "preview" && "modal__opened"}`}>
+    <div className={`modal ${activeModal === "preview" ? "modal__opened" : ""}`}>
       <div className="modal__content modal__content_type_image">
         <button
           aria-label="Close item modal"
@@ -25,10 +31,13 @@ function ItemModal({
           className="modal__close-btn"
           type="button"
         ></button>
+
         <img src={card.imageUrl} alt={card.name} className="modal__image" />
+
         <div className="modal__footer">
           <h2 className="modal__caption">{card.name}</h2>
           <p className="modal__weather">Weather: {card.weather}</p>
+
           {isOwn && (
             <button
               onClick={handleDelete}

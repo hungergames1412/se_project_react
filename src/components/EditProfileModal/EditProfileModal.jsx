@@ -40,7 +40,7 @@ export default function EditProfileModal({
       onSubmit={handleSubmit}
       isOpen={isOpen}
     >
-      <label htmlFor="name" className="modal__label">
+      <label htmlFor="profile-name" className="modal__label">
         Name{" "}
         <input
           type="text"
@@ -52,7 +52,7 @@ export default function EditProfileModal({
           value={name}
         />
       </label>
-      <label htmlFor="imageURL" className="modal__label">
+      <label htmlFor="profile-imageURL" className="modal__label">
         Avatar Image Url{" "}
         <input
           type="url"

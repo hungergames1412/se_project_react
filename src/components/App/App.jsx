@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 import { getWeather, filterWeatherData } from "../../utils/weatherApi";
 import { coordinates, APIkey } from "../../utils/constants";
@@ -24,7 +23,6 @@ import Profile from "../Profile/Profile";
 import Footer from "../Footer/Footer";
 import AddItemModal from "../AddItemModal/AddItemModal";
 import ItemModal from "../ItemModal/ItemModal";
-// Delete Confirmation modal to be added
 import RegisterModal from "../RegisterModal/RegisterModal";
 import LoginModal from "../LoginModal/LoginModal";
 import EditProfileModal from "../EditProfileModal/EditProfileModal";
@@ -38,10 +36,10 @@ function App() {
     condition: "",
     isDay: false,
   });
+
   const [clothingItems, setClothingItems] = useState([]);
   const [activeModal, setActiveModal] = useState("");
   const [selectedCard, setSelectedCard] = useState({});
-  const [currentDate, setCurrentDate] = useState("");
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -63,8 +61,7 @@ function App() {
   useEffect(() => {
     getItems()
       .then((data) => {
-        setClothingItems(data);
-        data.reverse();
+        setClothingItems([...data].reverse()); 
       })
       .catch((err) => {
         console.error("Failed to fetch clothing items:", err);
@@ -91,24 +88,13 @@ function App() {
     setSelectedCard(card);
   };
 
-  const handleAddClick = () => {
-    setActiveModal("add-garment");
-  };
-
-  const handleSignupClick = () => {
-    setActiveModal("new-user");
-  };
-
-  const handleLoginClick = () => {
-    setActiveModal("login-user");
-  };
-
-  const handleEditProfileClick = () => {
-    setActiveModal("edit-profile");
-  };
+  const handleAddClick = () => setActiveModal("add-garment");
+  const handleSignupClick = () => setActiveModal("new-user");
+  const handleLoginClick = () => setActiveModal("login-user");
+  const handleEditProfileClick = () => setActiveModal("edit-profile");
 
   const handleToggleSwitchChange = () => {
-    setCurrentTemperatureUnit(currentTemperatureUnit === "F" ? "C" : "F");
+    setCurrentTemperatureUnit((prev) => (prev === "F" ? "C" : "F"));
   };
 
   const handleLogout = () => {
@@ -121,25 +107,19 @@ function App() {
   const handleCardLike = ({ id, isLiked }) => {
     const token = localStorage.getItem("jwt");
 
-    !isLiked
+    const request = !isLiked
       ? addCardLike(id, token)
-          .then((updatedCard) => {
-            setClothingItems((cards) =>
-              cards.map((card) =>
-                card._id === updatedCard.data._id ? updatedCard.data : card,
-              ),
-            );
-          })
-          .catch((err) => console.error(err))
-      : removeCardLike(id, token)
-          .then((updatedCard) => {
-            setClothingItems((cards) =>
-              cards.map((card) =>
-                card._id === updatedCard.data._id ? updatedCard.data : card,
-              ),
-            );
-          })
-          .catch(console.error);
+      : removeCardLike(id, token);
+
+    request
+      .then((updatedCard) => {
+        setClothingItems((cards) =>
+          cards.map((card) =>
+            card._id === updatedCard.data._id ? updatedCard.data : card,
+          ),
+        );
+      })
+      .catch(console.error);
   };
 
   const handleRegistration = (userData) => {
@@ -150,11 +130,18 @@ function App() {
       password: userData.password,
     })
       .then(() => {
-        handleLogin({ email: userData.email, password: userData.password });
+        return signin({
+          email: userData.email,
+          password: userData.password,
+        });
       })
-      .then((user) => {
+      .then((res) => {
+        localStorage.setItem("jwt", res.token);
+        return getUserData(res.token);
+      })
+      .then((userData) => {
+        setCurrentUser(userData);
         setIsLoggedIn(true);
-        setCurrentUser(user);
         closeActiveModal();
       })
       .catch(console.error);
@@ -164,7 +151,6 @@ function App() {
     signin({ email, password })
       .then((res) => {
         localStorage.setItem("jwt", res.token);
-        // setIsLoggedIn(true);
         return getUserData(res.token);
       })
       .then((userData) => {
@@ -186,47 +172,42 @@ function App() {
 
     addItem(newCardData, token)
       .then((data) => {
-        setClothingItems([data, ...clothingItems]);
+        setClothingItems((prev) => [data, ...prev]); 
         closeActiveModal();
       })
       .catch(console.error);
   };
 
-  const handleDeleteClick = (_id) => {
+  const handleDeleteClick = () => {
     const token = localStorage.getItem("jwt");
-    const filteredArr = clothingItems.filter((item) => {
-      return item._id != selectedCard._id;
-    });
 
     removeItem(selectedCard._id, token)
       .then(() => {
-        setClothingItems(filteredArr);
-        closeActiveModal(card);
+        setClothingItems((prev) =>
+          prev.filter((item) => item._id !== selectedCard._id),
+        );
+        closeActiveModal(); // ✅ fixed
       })
       .catch(console.error);
   };
 
-  const closeActiveModal = () => {
-    setActiveModal("");
-  };
+  const closeActiveModal = () => setActiveModal("");
 
   const handleEditSubmit = ({ name, avatar }) => {
     const token = localStorage.getItem("jwt");
+
     updateProfileData({ token, name, avatar })
       .then(({ name, avatar }) => {
-        setCurrentUser({ ...currentUser, name, avatar });
+        setCurrentUser((prev) => ({ ...prev, name, avatar }));
         closeActiveModal();
       })
       .catch(console.error);
   };
 
   const onSecondaryButtonClick = () => {
-    if (activeModal === "login-user") {
-      setActiveModal("new-user");
-    }
-    if (activeModal === "new-user") {
-      setActiveModal("login-user");
-    }
+    setActiveModal((prev) =>
+      prev === "login-user" ? "new-user" : "login-user",
+    );
   };
 
   return (
@@ -240,10 +221,10 @@ function App() {
               handleAddClick={handleAddClick}
               handleSignupClick={handleSignupClick}
               handleLoginClick={handleLoginClick}
-              currentDate={currentDate}
               weatherData={weatherData}
               isLoggedIn={isLoggedIn}
             />
+
             <Routes>
               <Route
                 path="/"
@@ -257,6 +238,7 @@ function App() {
                   />
                 }
               />
+
               <Route
                 path="/profile"
                 element={
@@ -275,6 +257,7 @@ function App() {
                 }
               />
             </Routes>
+
             <Footer />
           </div>
 
@@ -282,14 +265,13 @@ function App() {
             isOpen={activeModal === "add-garment"}
             closeActiveModal={closeActiveModal}
             handleAddItemSubmit={handleAddItemSubmit}
-          ></AddItemModal>
+          />
 
           <ItemModal
             activeModal={activeModal}
             card={selectedCard}
             closeActiveModal={closeActiveModal}
             handleDeleteClick={handleDeleteClick}
-            selectedCard={selectedCard}
             currentUser={currentUser}
             isOpen={activeModal === "preview"}
           />
@@ -298,8 +280,6 @@ function App() {
             isOpen={activeModal === "new-user"}
             closeActiveModal={closeActiveModal}
             onSubmit={handleRegistration}
-            activeModal={activeModal}
-            handleSignupClick={handleSignupClick}
             onSecondButtonClick={onSecondaryButtonClick}
           />
 
@@ -307,9 +287,6 @@ function App() {
             isOpen={activeModal === "login-user"}
             closeActiveModal={closeActiveModal}
             onLoginModalSubmit={handleLogin}
-            activeModal={activeModal}
-            loginClick={handleLoginClick}
-            handleSignupClick={handleSignupClick}
             onSecondButtonClick={onSecondaryButtonClick}
           />
 
