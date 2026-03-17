@@ -3,9 +3,11 @@ import "./ModalWithForm.css";
 function ModalWithForm({
   children,
   buttonText,
+  secondButtonText,
   title,
   isOpen,
-  onClose,
+  onSecondButtonClick,
+  closeActiveModal,
   onSubmit,
 }) {
   return (
@@ -14,15 +16,26 @@ function ModalWithForm({
         <h2 className="modal__title">{title}</h2>
         <button
           aria-label="Close form modal"
-          onClick={onClose}
+          onClick={closeActiveModal}
           className="modal__close-btn"
           type="button"
         ></button>
         <form onSubmit={onSubmit} className="modal__form">
           {children}
-          <button className="modal__submit" type="submit">
-            {buttonText}
-          </button>
+          <div className="modal__buttons">
+            <button type="submit" className="modal__submit">
+              {buttonText}
+            </button>
+            {secondButtonText && (
+              <button
+                type="button"
+                className="modal__switch"
+                onClick={onSecondButtonClick}
+              >
+                {secondButtonText}
+              </button>
+            )}
+          </div>
         </form>
       </div>
     </div>

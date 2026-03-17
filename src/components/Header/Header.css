@@ -13,8 +13,29 @@
   align-self: flex-start;
 }
 
+.loggedin_nav-container {
+  display: flex;
+  flex-direction: row;
+}
+
 .header__date-and-location {
   margin: 0;
+}
+
+.header__profile-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-decoration: none !important;
+  padding-right: 40px;
+}
+
+.header__avatar {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  object-fit: cover;
 }
 
 .header__add-clothes-btn {
@@ -23,7 +44,6 @@
   font-size: 20px;
   line-height: 24px;
   font-weight: 700;
-  background-color: transparent;
 }
 
 .header__user-container {
@@ -35,9 +55,40 @@
 .header__username {
   margin: 0;
   line-height: 100%;
+  padding-right: 12px;
+  line-height: 24px;
+  color: black;
+  text-decoration: none;
 }
 
 .header__nav-link {
   color: #000;
   text-decoration: none;
+}
+
+.header__signup-button {
+  font-weight: 700;
+  line-height: 24px;
+  padding: 0px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Cabinet Grotesk", sans-serif;
+}
+
+.header__login-button {
+  font-weight: 700;
+  line-height: 24px;
+  padding-right: 40px;
+  padding-left: 20px;
+  margin: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Cabinet Grotesk", sans-serif;
+}
+
+.loggedin_nav-container {
+  display: flex;
+  flex-direction: row;
 }

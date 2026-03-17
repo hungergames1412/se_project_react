@@ -1,6 +1,17 @@
 import "./ItemModal.css";
+import { useContext } from "react";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
 
-function ItemModal({ activeModal, onClose, card, handleDeleteClick }) {
+function ItemModal({
+  activeModal,
+  closeActiveModal,
+  card,
+  handleDeleteClick,
+  selectedCard,
+}) {
+  const currentUser = useContext(CurrentUserContext);
+  const isOwn = selectedCard.owner === currentUser._id;
+
   const handleDelete = () => {
     handleDeleteClick(card);
   };
@@ -10,7 +21,7 @@ function ItemModal({ activeModal, onClose, card, handleDeleteClick }) {
       <div className="modal__content modal__content_type_image">
         <button
           aria-label="Close item modal"
-          onClick={onClose}
+          onClick={closeActiveModal}
           className="modal__close-btn"
           type="button"
         ></button>
@@ -18,13 +29,15 @@ function ItemModal({ activeModal, onClose, card, handleDeleteClick }) {
         <div className="modal__footer">
           <h2 className="modal__caption">{card.name}</h2>
           <p className="modal__weather">Weather: {card.weather}</p>
-          <button
-            onClick={handleDelete}
-            type="button"
-            className="modal__delete-item"
-          >
-            Delete item
-          </button>
+          {isOwn && (
+            <button
+              onClick={handleDelete}
+              type="button"
+              className="modal__delete-item"
+            >
+              Delete item
+            </button>
+          )}
         </div>
       </div>
     </div>

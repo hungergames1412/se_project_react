@@ -1,37 +1,87 @@
 import "./Header.css";
-import logo from "../../assets/logo.svg";
-import avatar from "../../assets/avatar.svg";
-import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
 import { NavLink } from "react-router-dom";
+import { useContext } from "react";
 
-function Header({ handleAddClick, weatherData }) {
+import logo from "../../assets/logo.svg";
+import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
+
+function Header({
+  handleAddClick,
+  weatherData,
+  isLoggedIn,
+  handleSignupClick,
+  handleLoginClick,
+}) {
+  const currentUser = useContext(CurrentUserContext);
+
   const currentDate = new Date().toLocaleString("default", {
     month: "long",
     day: "numeric",
   });
 
+  const renderAvatar = () => {
+    if (currentUser?.avatar) {
+      return (
+        <img
+          src={currentUser.avatar}
+          alt={`${currentUser.name}`}
+          className="header__avatar"
+        />
+      );
+    }
+    const initial = currentUser?.name?.[0]?.toUpperCase() || "?";
+    return (
+      <div className="header__avatar header__avatar_placeholder">{initial}</div>
+    );
+  };
+
   return (
     <header className="header">
       <NavLink className="header__nav-link" to="/">
-        <img className="header__logo" src={logo} alt="App logo" />
+        <img className="header__logo" src={logo} alt="WTWR logo" />
       </NavLink>
       <p className="header__date-and-location">
         {currentDate}, {weatherData.city}
       </p>
       <ToggleSwitch />
-      <button
-        onClick={handleAddClick}
-        type="button"
-        className="header__add-clothes-btn"
-      >
-        + Add clothes
-      </button>
-      <NavLink className="header__nav-link" to="/profile">
-        <div className="header__user-container">
-          <p className="header__username">Terrence Tegegne</p>
-          <img src={avatar} alt="Terrence Tegegne" className="header__avatar" />
-        </div>
-      </NavLink>
+
+      {isLoggedIn ? (
+        <ul className="loggedin_nav-container">
+          <button
+            onClick={handleAddClick}
+            type="button"
+            className="header__add-clothes-btn"
+          >
+            {" "}
+            + Add clothes
+          </button>
+          <NavLink to="/profile" className="header__nav-link">
+            <div className="header__profile-container">
+              <p className="header__username">{currentUser?.name}</p>
+              {renderAvatar()}
+            </div>
+          </NavLink>
+        </ul>
+      ) : (
+        <ul className="not-loggedin_nav-container">
+          <button
+            className="header__signup-button"
+            onClick={handleSignupClick}
+            type="button"
+          >
+            Sign Up
+          </button>
+          <button
+            className="header__login-button"
+            onClick={handleLoginClick}
+            type="button"
+          >
+            {" "}
+            Login
+          </button>
+        </ul>
+      )}
     </header>
   );
 }

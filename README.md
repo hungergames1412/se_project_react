@@ -14,6 +14,9 @@ Features:
 - Modal components for item details and forms
 - Ability to add other clothing items
 - Toggle Switch to change from Celsius to Fahrenheit
+- Expands API-driven features such as comments or advanced search.
+- Enhances UI/UX with light/dark mode themes.
+- Optimizes performance with React.lazy and code splitting.
 
 Link to the respository:
 https://github.com/hungergames1412/se_project_react.git
