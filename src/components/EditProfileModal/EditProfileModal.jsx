@@ -1,6 +1,6 @@
+import { useEffect, useContext } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
-import { useState, useEffect, useContext } from "react";
-
+import { useForm } from "../../hooks/useForm";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 
 export default function EditProfileModal({
@@ -9,27 +9,21 @@ export default function EditProfileModal({
   onEditModalSubmit,
 }) {
   const currentUser = useContext(CurrentUserContext);
-  const [name, setName] = useState("");
-  const [avatar, setAvatar] = useState("");
+
+  const { values, setValues, handleChange } = useForm({
+    name: "",
+    avatar: "",
+  });
 
   useEffect(() => {
-    if (isOpen) {
-      setName(currentUser.name);
-      setAvatar(currentUser.avatar);
+    if (isOpen && currentUser) {
+      setValues({ name: currentUser.name, avatar: currentUser.avatar });
     }
-  }, [isOpen]);
-
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleAvatarChange = (e) => {
-    setAvatar(e.target.value);
-  };
+  }, [isOpen, currentUser, setValues]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onEditModalSubmit({ name, avatar });
+    onEditModalSubmit(values);
   };
 
   return (
@@ -41,27 +35,30 @@ export default function EditProfileModal({
       isOpen={isOpen}
     >
       <label htmlFor="profile-name" className="modal__label">
-        Name{" "}
+        Name
         <input
           type="text"
+          name="name"
           className="modal__input"
           id="profile-name"
           placeholder="Name"
           required
-          onChange={handleNameChange}
-          value={name}
+          value={values.name}
+          onChange={handleChange}
         />
       </label>
+
       <label htmlFor="profile-imageURL" className="modal__label">
-        Avatar Image Url{" "}
+        Avatar Image URL
         <input
           type="url"
+          name="avatar"
           className="modal__input"
           id="profile-imageURL"
           placeholder="Image URL"
           required
-          onChange={handleAvatarChange}
-          value={avatar}
+          value={values.avatar}
+          onChange={handleChange}
         />
       </label>
     </ModalWithForm>

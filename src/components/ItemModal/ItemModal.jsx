@@ -5,22 +5,19 @@ import CurrentUserContext from "../../contexts/CurrentUserContext";
 function ItemModal({
   activeModal,
   closeActiveModal,
-  card,
-  handleDeleteClick,
   selectedCard,
+  handleDeleteClick,
 }) {
   const currentUser = useContext(CurrentUserContext);
 
+  if (!selectedCard) return null;
+
   const ownerId =
-    typeof selectedCard?.owner === "string"
-      ? selectedCard?.owner
-      : selectedCard?.owner?._id;
+    typeof selectedCard.owner === "string"
+      ? selectedCard.owner
+      : selectedCard.owner?._id;
 
   const isOwn = ownerId === currentUser?._id;
-
-  const handleDelete = () => {
-    handleDeleteClick();
-  };
 
   return (
     <div
@@ -32,17 +29,21 @@ function ItemModal({
           onClick={closeActiveModal}
           className="modal__close-btn"
           type="button"
-        ></button>
+        />
 
-        <img src={card?.imageUrl} alt={card?.name} className="modal__image" />
+        <img
+          src={selectedCard.imageUrl}
+          alt={selectedCard.name}
+          className="modal__image"
+        />
 
         <div className="modal__footer">
-          <h2 className="modal__caption">{card?.name}</h2>
-          <p className="modal__weather">Weather: {card?.weather}</p>
+          <h2 className="modal__caption">{selectedCard.name}</h2>
+          <p className="modal__weather">Weather: {selectedCard.weather}</p>
 
           {isOwn && (
             <button
-              onClick={handleDelete}
+              onClick={handleDeleteClick}
               type="button"
               className="modal__delete-item"
             >

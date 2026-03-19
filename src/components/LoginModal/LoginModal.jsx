@@ -1,27 +1,29 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
+import { useForm } from "../../hooks/useForm"; 
 
-export default function LogInModal({
+export default function LoginModal({
+  closeActiveModal,
   isOpen,
-  onClose,
-  handleLogin,
-  handleRegisterClick,
+  onLoginModalSubmit,
+  onSecondButtonClick,
 }) {
-  const { values, handleChange, errors, isValid, resetForm } =
-    useFormAndValidation();
+
+  const { values, setValues, handleChange } = useForm({
+    email: "",
+    password: "",
+  });
 
   useEffect(() => {
     if (isOpen) {
-      resetForm();
+      setValues({ email: "", password: "" });
     }
-  }, [isOpen, resetForm]);
+  }, [isOpen, setValues]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onLoginModalSubmit({ email, password });
+    onLoginModalSubmit(values);
   };
-
-  const switchModal = () => onSecondButtonClick();
 
   return (
     <ModalWithForm
@@ -31,7 +33,6 @@ export default function LogInModal({
       closeActiveModal={closeActiveModal}
       isOpen={isOpen}
       onSubmit={handleSubmit}
-      switchModal={switchModal}
       onSecondButtonClick={onSecondButtonClick}
     >
       <label htmlFor="login-email" className="modal__label">
@@ -42,8 +43,8 @@ export default function LogInModal({
           className="modal__input"
           id="login-email"
           placeholder="Enter your email"
-          value={email}
-          onChange={handleEmailChange}
+          value={values.email}
+          onChange={handleChange}
           required
         />
       </label>
@@ -58,8 +59,8 @@ export default function LogInModal({
           placeholder="Enter your password"
           minLength={8}
           maxLength={16}
-          value={password}
-          onChange={handlePasswordChange}
+          value={values.password}
+          onChange={handleChange}
           required
         />
       </label>

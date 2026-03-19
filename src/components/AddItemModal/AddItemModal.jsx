@@ -14,7 +14,7 @@ const AddItemModal = ({ isOpen, handleAddItemSubmit, closeActiveModal }) => {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    handleAddItemSubmit(values); 
+    handleAddItemSubmit(values);
   }
 
   return (

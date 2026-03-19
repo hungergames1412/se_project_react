@@ -61,7 +61,7 @@ function App() {
   useEffect(() => {
     getItems()
       .then((data) => {
-        setClothingItems([...data].reverse()); 
+        setClothingItems([...data].reverse());
       })
       .catch((err) => {
         console.error("Failed to fetch clothing items:", err);
@@ -172,7 +172,7 @@ function App() {
 
     addItem(newCardData, token)
       .then((data) => {
-        setClothingItems((prev) => [data, ...prev]); 
+        setClothingItems((prev) => [data, ...prev]);
         closeActiveModal();
       })
       .catch(console.error);
@@ -186,7 +186,7 @@ function App() {
         setClothingItems((prev) =>
           prev.filter((item) => item._id !== selectedCard._id),
         );
-        closeActiveModal(); // ✅ fixed
+        closeActiveModal();
       })
       .catch(console.error);
   };
