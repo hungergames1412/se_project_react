@@ -20,60 +20,25 @@ function Header({
     day: "numeric",
   });
 
-  const renderAvatar = () => {
-    if (currentUser?.avatar) {
-      return (
-        <img
-          src={currentUser.avatar}
-          alt={currentUser.name}
-          className="header__avatar"
-        />
-      );
-    }
-
-    const initial = currentUser?.name?.[0]?.toUpperCase() || "?";
-
-    return (
-      <div className="header__avatar header__avatar_placeholder">{initial}</div>
-    );
-  };
-
   return (
     <header className="header">
-      <NavLink className="header__nav-link" to="/">
-        <img className="header__logo" src={logo} alt="WTWR logo" />
-      </NavLink>
+      <div className="header__left">
+        <NavLink to="/" className="header__logo-link">
+          <img src={logo} alt="WTWR logo" className="header__logo" />
+        </NavLink>
+      </div>
 
-      <p className="header__date-and-location">
+      <p className="header__date">
         {currentDate}, {weatherData?.city}
       </p>
 
       <div className="header__right">
-        {isLoggedIn ? (
-          <div className="header__controls">
-            <ToggleSwitch />
+        <ToggleSwitch />
 
+        {!isLoggedIn ? (
+          <>
             <button
-              onClick={handleAddClick}
-              type="button"
-              className="header__add-clothes-btn"
-            >
-              + Add clothes
-            </button>
-
-            <NavLink to="/profile" className="header__nav-link">
-              <div className="header__profile-container">
-                <p className="header__username">{currentUser?.name}</p>
-                {renderAvatar()}
-              </div>
-            </NavLink>
-          </div>
-        ) : (
-          <div className="header__controls">
-            <ToggleSwitch />
-
-            <button
-              className="header__signup-button"
+              className="header__signup-btn"
               onClick={handleSignupClick}
               type="button"
             >
@@ -81,13 +46,33 @@ function Header({
             </button>
 
             <button
-              className="header__login-button"
+              className="header__login-btn"
               onClick={handleLoginClick}
               type="button"
             >
               Log In
             </button>
-          </div>
+          </>
+        ) : (
+          <>
+            <button
+              className="header__add-btn"
+              onClick={handleAddClick}
+              type="button"
+            >
+              + Add clothes
+            </button>
+
+            <NavLink to="/profile" className="header__profile">
+              <p className="header__username">{currentUser?.name}</p>
+
+              <img
+                src={currentUser?.avatar}
+                alt="avatar"
+                className="header__avatar"
+              />
+            </NavLink>
+          </>
         )}
       </div>
     </header>

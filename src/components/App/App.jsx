@@ -44,6 +44,7 @@ function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -77,6 +78,22 @@ function App() {
         });
     }
   }, []);
+
+  useEffect(() => {
+    if (!activeModal) return;
+
+    const handleEscClose = (e) => {
+      if (e.key === "Escape") {
+        closeActiveModal();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscClose);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscClose);
+    };
+  }, [activeModal]);
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
@@ -154,12 +171,15 @@ function App() {
   const handleAddItemSubmit = (values) => {
     const token = localStorage.getItem("jwt");
 
+    setIsLoading(true);
+
     addItem(values, token)
       .then((data) => {
         setClothingItems((prev) => [data, ...prev]);
         closeActiveModal();
       })
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
   };
 
   const handleDeleteClick = () => {
@@ -222,6 +242,7 @@ function App() {
                   />
                 }
               />
+
               <Route
                 path="/profile"
                 element={
@@ -230,7 +251,6 @@ function App() {
                       clothingItems={clothingItems}
                       handleCardClick={handleCardClick}
                       handleAddClick={handleAddClick}
-                      currentUser={currentUser}
                       onEditProfile={handleEditProfileClick}
                       onLogout={handleLogout}
                       isLoggedIn={isLoggedIn}
@@ -248,6 +268,7 @@ function App() {
             isOpen={activeModal === "add-garment"}
             closeActiveModal={closeActiveModal}
             handleAddItemSubmit={handleAddItemSubmit}
+            isLoading={isLoading} // ✅ added
           />
 
           <ItemModal

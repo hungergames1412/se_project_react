@@ -9,9 +9,13 @@ function ItemCard({ item, onCardClick, onCardLike, isLoggedIn }) {
     onCardClick(item);
   };
 
-  const isLiked = item.likes?.some((id) => id === currentUser._id);
+  const isLiked = item.likes?.some((like) => {
+    const likeId = typeof like === "string" ? like : like._id;
+    return likeId === currentUser?._id;
+  });
 
   const handleLikeClick = () => {
+    if (!onCardLike) return;
     onCardLike({ id: item._id, isLiked });
   };
 
@@ -25,6 +29,7 @@ function ItemCard({ item, onCardClick, onCardLike, isLoggedIn }) {
             isLiked ? "card__like-button_active" : ""
           }`}
           onClick={handleLikeClick}
+          type="button"
         />
       )}
 
