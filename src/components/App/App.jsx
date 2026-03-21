@@ -53,9 +53,7 @@ function App() {
         const filteredData = filterWeatherData(data);
         setWeatherData(filteredData);
       })
-      .catch((err) => {
-        console.error("Failed to fetch weather data:", err);
-      });
+      .catch(console.error);
   }, []);
 
   useEffect(() => {
@@ -63,9 +61,7 @@ function App() {
       .then((data) => {
         setClothingItems([...data].reverse());
       })
-      .catch((err) => {
-        console.error("Failed to fetch clothing items:", err);
-      });
+      .catch(console.error);
   }, []);
 
   useEffect(() => {
@@ -76,16 +72,15 @@ function App() {
           setCurrentUser(user);
           setIsLoggedIn(true);
         })
-        .catch((err) => {
-          console.error("Token validation failed:", err);
+        .catch(() => {
           localStorage.removeItem("jwt");
         });
     }
   }, []);
 
   const handleCardClick = (card) => {
-    setActiveModal("preview");
     setSelectedCard(card);
+    setActiveModal("preview");
   };
 
   const handleAddClick = () => setActiveModal("add-garment");
@@ -123,24 +118,19 @@ function App() {
   };
 
   const handleRegistration = (userData) => {
-    signup({
-      name: userData.name,
-      avatar: userData.avatar,
-      email: userData.email,
-      password: userData.password,
-    })
-      .then(() => {
-        return signin({
+    signup(userData)
+      .then(() =>
+        signin({
           email: userData.email,
           password: userData.password,
-        });
-      })
+        }),
+      )
       .then((res) => {
         localStorage.setItem("jwt", res.token);
         return getUserData(res.token);
       })
-      .then((userData) => {
-        setCurrentUser(userData);
+      .then((user) => {
+        setCurrentUser(user);
         setIsLoggedIn(true);
         closeActiveModal();
       })
@@ -153,24 +143,18 @@ function App() {
         localStorage.setItem("jwt", res.token);
         return getUserData(res.token);
       })
-      .then((userData) => {
-        setCurrentUser(userData);
+      .then((user) => {
+        setCurrentUser(user);
         setIsLoggedIn(true);
         closeActiveModal();
       })
       .catch(console.error);
   };
 
-  const handleAddItemSubmit = (inputValues) => {
+  const handleAddItemSubmit = (values) => {
     const token = localStorage.getItem("jwt");
 
-    const newCardData = {
-      name: inputValues.name,
-      imageUrl: inputValues.imageUrl,
-      weather: inputValues.weather,
-    };
-
-    addItem(newCardData, token)
+    addItem(values, token)
       .then((data) => {
         setClothingItems((prev) => [data, ...prev]);
         closeActiveModal();
@@ -238,7 +222,6 @@ function App() {
                   />
                 }
               />
-
               <Route
                 path="/profile"
                 element={
@@ -272,8 +255,6 @@ function App() {
             card={selectedCard}
             closeActiveModal={closeActiveModal}
             handleDeleteClick={handleDeleteClick}
-            currentUser={currentUser}
-            isOpen={activeModal === "preview"}
           />
 
           <RegisterModal
@@ -291,9 +272,9 @@ function App() {
           />
 
           <EditProfileModal
+            isOpen={activeModal === "edit-profile"}
             closeActiveModal={closeActiveModal}
             onEditModalSubmit={handleEditSubmit}
-            isOpen={activeModal === "edit-profile"}
           />
         </div>
       </CurrentTemperatureUnitContext.Provider>

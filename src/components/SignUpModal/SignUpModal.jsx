@@ -2,66 +2,40 @@ import { useEffect } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import { useForm } from "../../hooks/useForm";
 
-export default function RegisterModal({
-  isOpen,
+export default function SignUpModal({
   closeActiveModal,
-  onSubmit,
+  isOpen,
+  onSignUpModalSubmit,
   onSecondButtonClick,
 }) {
   const { values, setValues, handleChange } = useForm({
-    name: "",
-    avatar: "",
     email: "",
     password: "",
+    name: "",
+    avatarUrl: "",
   });
 
   useEffect(() => {
     if (isOpen) {
-      setValues({ name: "", avatar: "", email: "", password: "" });
+      setValues({ email: "", password: "", name: "", avatarUrl: "" });
     }
   }, [isOpen, setValues]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(values);
+    onSignUpModalSubmit(values);
   };
 
   return (
     <ModalWithForm
       title="Sign Up"
       buttonText="Sign Up"
-      isOpen={isOpen}
+      secondButtonText="or Log In"
       closeActiveModal={closeActiveModal}
+      isOpen={isOpen}
       onSubmit={handleSubmit}
-      secondButtonText="or Log in"
       onSecondButtonClick={onSecondButtonClick}
     >
-      <label htmlFor="signup-name" className="modal__label">
-        Name*
-        <input
-          type="text"
-          name="name"
-          className="modal__input"
-          id="signup-name"
-          placeholder="Name"
-          value={values.name}
-          onChange={handleChange}
-          required
-        />
-      </label>
-      <label htmlFor="signup-avatar" className="modal__label">
-        Avatar URL*
-        <input
-          type="url"
-          name="avatar"
-          className="modal__input"
-          id="signup-avatar"
-          placeholder="Avatar URL"
-          value={values.avatar}
-          onChange={handleChange}
-          required
-        />
-      </label>
       <label htmlFor="signup-email" className="modal__label">
         Email*
         <input
@@ -83,9 +57,33 @@ export default function RegisterModal({
           className="modal__input"
           id="signup-password"
           placeholder="Password"
-          minLength={8}
-          maxLength={16}
           value={values.password}
+          onChange={handleChange}
+          required
+        />
+      </label>
+      <label htmlFor="signup-name" className="modal__label">
+        Name *
+        <input
+          type="text"
+          name="name"
+          className="modal__input"
+          id="signup-name"
+          placeholder="Name"
+          value={values.name}
+          onChange={handleChange}
+          required
+        />
+      </label>
+      <label htmlFor="signup-avatar" className="modal__label">
+        Avatar URL *
+        <input
+          type="text"
+          name="avatarUrl"
+          className="modal__input"
+          id="signup-avatar"
+          placeholder="Avatar URL"
+          value={values.avatarUrl}
           onChange={handleChange}
           required
         />

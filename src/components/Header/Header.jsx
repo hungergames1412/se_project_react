@@ -85,7 +85,7 @@ function Header({
               onClick={handleLoginClick}
               type="button"
             >
-              Login
+              Log In
             </button>
           </div>
         )}
