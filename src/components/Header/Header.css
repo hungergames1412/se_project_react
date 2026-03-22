@@ -13,8 +13,11 @@
   width: 89px;
 }
 
-.header__date-and-location {
+.header__date {
   margin: 0;
+  font-weight: 500;
+  font-size: 16px;
+  color: #555;
 }
 
 .header__right {
@@ -23,37 +26,71 @@
   gap: 20px;
 }
 
-.header__signup-button,
-.header__login-button,
-.header__add-clothes-btn {
+.header__signup-btn,
+.header__login-btn,
+.header__add-btn {
   background: none;
   border: none;
   font-weight: 700;
   cursor: pointer;
   font-family: "Cabinet Grotesk", sans-serif;
   padding: 0;
+  color: #222;
 }
 
-.header__profile-container {
+.header__signup-btn:hover,
+.header__login-btn:hover,
+.header__add-btn:hover {
+  color: #3b82f6;
+}
+
+.header__profile {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   text-decoration: none;
-}
-
-.header__avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
+  color: inherit;
 }
 
 .header__username {
   margin: 0;
-  color: black;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.header__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .header__nav-link {
   color: #000;
   text-decoration: none;
+}
+
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .header__right {
+    margin-top: 12px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .header__username {
+    font-size: 14px;
+  }
+
+  .header__avatar {
+    width: 32px;
+    height: 32px;
+  }
 }

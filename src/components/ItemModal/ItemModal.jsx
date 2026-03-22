@@ -10,7 +10,7 @@ function ItemModal({
 }) {
   const currentUser = useContext(CurrentUserContext);
 
-  if (!selectedCard) return null;
+  if (activeModal !== "preview" || !selectedCard) return null;
 
   const ownerId =
     typeof selectedCard.owner === "string"
@@ -20,9 +20,7 @@ function ItemModal({
   const isOwn = ownerId === currentUser?._id;
 
   return (
-    <div
-      className={`modal ${activeModal === "preview" ? "modal__opened" : ""}`}
-    >
+    <div className="modal modal__opened">
       <div className="modal__content modal__content_type_image">
         <button
           aria-label="Close item modal"

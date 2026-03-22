@@ -273,7 +273,7 @@ function App() {
 
           <ItemModal
             activeModal={activeModal}
-            card={selectedCard}
+            selectedCard={selectedCard}
             closeActiveModal={closeActiveModal}
             handleDeleteClick={handleDeleteClick}
           />
